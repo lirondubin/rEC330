@@ -14,7 +14,7 @@ unsigned long genA(int n)
 int main()
 {
 	// int A1 = 1, A2 = 1;
-	int n = 3;
+	int n = 4;
 	int A[n];
 	memset(A, 0, sizeof(int) * n);
 	A[0] = 1;
@@ -33,11 +33,11 @@ int main()
 	}
 	else
 	{
-		int temp_n = n - 2;
-		for (temp_n; temp_n < n; temp_n++)
+		// int temp_n = n - 2;
+
+		for (int temp_n = 2; temp_n < n; temp_n++)
 		{
-			// cout << "j = " << j << "\n";
-			// cout << "n - j = " << n - j << "\n";
+			cout << "temp_n = " << temp_n << "\n";
 			if (temp_n == 0)
 			{
 				A[temp_n] = 1;
@@ -52,7 +52,7 @@ int main()
 				{
 					runSUM = runSUM + (A[i] * A[temp_n - 1 - i]);
 					cout << "i = " << i << "\n";
-					cout << "temp_n = " << temp_n << "\n";
+					cout << "temp_n - 1 - i = " << temp_n - 1 - i << "\n";
 					cout << "A[i] = " << A[i] << "\n";
 					cout << "A[temp_n - 1 - i] = " << A[temp_n - 1 - i] << "\n";
 					cout << "runSUM = " << runSUM << "\n";
@@ -61,6 +61,7 @@ int main()
 					{
 						A[temp_n] = runSUM;
 						cout << "Val in A: " << A[temp_n] << "\n";
+						// i = 0;
 					}
 				}
 				cout << "A[temp_n] = " << A[temp_n] << "\n";
