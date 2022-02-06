@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstring>
-#include <math.h>
 
 using std::cout;
 using std::memset;
@@ -28,27 +27,16 @@ unsigned long genA(int n)
 	{
 		for (int temp_n = 2; temp_n < n; temp_n++)
 		{
-			if (temp_n == 0)
+			for (int i = 0; i < temp_n; i++)
 			{
-				A[temp_n] = 1;
-			}
-			else if (temp_n == 1)
-			{
-				A[temp_n] = 1;
-			}
-			else
-			{
-				for (int i = 0; i < temp_n; i++)
+				runSUM = runSUM + (A[i] * A[temp_n - 1 - i]);
+				if (temp_n - 1 - i == 0)
 				{
-					runSUM = runSUM + (A[i] * A[temp_n - 1 - i]);
-					if (temp_n - 1 - i == 0)
-					{
-						A[temp_n] = runSUM;
-						runSUM = 0;
-					}
+					A[temp_n] = runSUM;
+					runSUM = 0;
 				}
-				totSUM = A[temp_n];
 			}
+			totSUM = A[temp_n];
 		}
 	}
 	cout << "totSUM = " << totSUM << "\n";
@@ -57,6 +45,4 @@ unsigned long genA(int n)
 
 int main()
 {
-	int n = 7;
-	genA(n);
 }
