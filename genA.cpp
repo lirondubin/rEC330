@@ -14,12 +14,13 @@ unsigned long genA(int n)
 int main()
 {
 	// int A1 = 1, A2 = 1;
-	int n = 4;
+	int n = 7;
 	int A[n];
 	memset(A, 0, sizeof(int) * n);
 	A[0] = 1;
 	A[1] = 1;
 	int runSUM = 0;
+	int totSUM = 0;
 
 	if (n == 1)
 	{
@@ -61,14 +62,15 @@ int main()
 					{
 						A[temp_n] = runSUM;
 						cout << "Val in A: " << A[temp_n] << "\n";
-						// i = 0;
+						runSUM = 0;
 					}
 				}
 				cout << "A[temp_n] = " << A[temp_n] << "\n";
+				totSUM = A[temp_n];
 			}
 			cout << "\n";
 		}
 	}
-	cout << "runSUM = " << runSUM << "\n";
-	return 0;
+	cout << "totSUM " << totSUM << "\n";
+	return totSUM;
 }
