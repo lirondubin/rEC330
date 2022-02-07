@@ -20,13 +20,9 @@ char findOdd(char arr[], int arr_size)
         {
             int val = i + 97;
             char ret_char = (char)val;
-            cout << ret_char << " is the ascii value for " << val;
+            // cout << ret_char;
             return ret_char;
         }
     }
     return error;
-}
-
-int main()
-{
 }
