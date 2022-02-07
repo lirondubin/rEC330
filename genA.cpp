@@ -39,10 +39,6 @@ unsigned long genA(int n)
 			totSUM = A[temp_n];
 		}
 	}
-	cout << "totSUM = " << totSUM << "\n";
+	// cout << totSUM;
 	return totSUM;
-}
-
-int main()
-{
 }
