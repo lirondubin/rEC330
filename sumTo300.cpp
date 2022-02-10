@@ -24,31 +24,36 @@ int sumTo330(vector<int> nums)
                 if (tempClose == 300)
                 {
                     money = 300;
-                    cout << "The answer is " << money << endl;
                     return money;
                 }
-                else if (tempClose > 300 && (abs(tempClose-300) < abs(closeOver-300)))
+                else if (tempClose > 300 && (abs(tempClose - 300) < abs(closeOver - 300)))
                 {
                     closeOver = tempClose;
                 }
-                else if (tempClose < 300 && (tempClose > closeUnder))
+                else if (tempClose < 300 && (abs(tempClose - 300) < abs(closeOver - 300)))
                 {
+                    cout << "tempClose = " << tempClose << endl;
                     closeUnder = tempClose;
                 }
             }
         }
     }
-    if (300 - closeUnder > closeOver - 300){
+    if (abs(300 - closeUnder) > abs(300 - closeOver))
+    {
+        cout << "Over return = " << closeOver << endl;
         return closeOver;
     }
-    else{
+    else
+    {
+        cout << "Under return = " << closeUnder << endl;
         return closeUnder;
     }
 }
 
 int main()
 {
-    vector<int> nums{100, 90, 70, 150};
-    int sum = sumTo330(nums);
-    cout << "The sum is " << sum << endl;
+    // vector<int> nums{100, 90, 80, 30, 25, 35, 75};
+    vector<int> nums{100, 90, 80, 70};
+    int theSum = sumTo330(nums);
+    cout << theSum << endl;
 }
