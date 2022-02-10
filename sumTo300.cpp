@@ -30,9 +30,8 @@ int sumTo330(vector<int> nums)
                 {
                     closeOver = tempClose;
                 }
-                else if (tempClose < 300 && (abs(tempClose - 300) < abs(closeOver - 300)))
+                else if (tempClose < 300 && (abs(tempClose - 300) < abs(closeUnder - 300)))
                 {
-                    cout << "tempClose = " << tempClose << endl;
                     closeUnder = tempClose;
                 }
             }
@@ -40,20 +39,18 @@ int sumTo330(vector<int> nums)
     }
     if (abs(300 - closeUnder) > abs(300 - closeOver))
     {
-        cout << "Over return = " << closeOver << endl;
         return closeOver;
     }
     else
     {
-        cout << "Under return = " << closeUnder << endl;
         return closeUnder;
     }
 }
 
 int main()
 {
-    // vector<int> nums{100, 90, 80, 30, 25, 35, 75};
-    vector<int> nums{100, 90, 80, 70};
+    vector<int> nums{100, 90, 30, 35, 75, 120, 200, 375, 140};
+    // vector<int> nums{100, 90, 80, 70};
     int theSum = sumTo330(nums);
     cout << theSum << endl;
 }
