@@ -7,7 +7,7 @@ using namespace std;
 int Gcounter = 0;
 int c_counter = 0;
 
-// void printArray(vector<int> *Bint, int size);
+void printArray(vector<int> *Bint, int size);
 void mergeSort(vector<int> *Bint, int l, int r);
 void merge(vector<int> *Bint, int p, int q, int r);
 int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rankedListB);
@@ -17,7 +17,7 @@ int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rank
 int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rankedListB)
 {
     // This section uses a MAP to convert the vec strings to a vec of ints
-    vector<int> *Bint(rankedListB.size());
+    vector<int> Bint(rankedListB.size());
     map<string, int> songMap;
     for (int i = 0; i < rankedListA.size(); i++)
     {
@@ -28,16 +28,21 @@ int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rank
     {
         string temp = rankedListB[i];
         Bint[i] = songMap.at(temp);
-        // cout << "Bint[i] = " << Bint[i] << endl;
-    }
+    }  
 
     // This section does the good stuff and solves the mystery
-    int size = rankedListB.size();
+    int size = Bint.size();
     mergeSort(Bint, 0, size - 1);
-    // cout << "Sorted array: \n";
-    // printArray(Bint, size);
-    int tot = c_counter + Gcounter;
-    // cout << "tot = " << tot << endl;
+    int tot;
+    if (size < 4)
+    {
+        tot = Gcounter;
+    }
+    else
+    {
+        tot = Gcounter + c_counter;
+    }
+
     return tot;
 }
 */
@@ -89,10 +94,14 @@ void merge(vector<int> Bint, int p, int q, int r)
         Bint[k] = L[i];
         i++;
         k++;
-        cout << "c" << endl;
+        //cout << "p = " << p << endl;
+        //cout << "q = " << q << endl;
+        //cout << "r = " << r << endl;
+        //cout << "c" << endl;
         if (n1 != 2)
         {
             c_counter++;
+            cout << "in loop" << endl;
         }
     }
     while (j < n2)
@@ -110,7 +119,7 @@ void merge(vector<int> Bint, int p, int q, int r)
 void mergeSort(vector<int> Bint, int l, int r)
 {
     // int counter;
-    if (l < r)
+    if (l < r) // r is the end of the array
     {
         // m is the point where the array is divided into two subarrays
         int m = l + (r - l) / 2;
@@ -121,17 +130,27 @@ void mergeSort(vector<int> Bint, int l, int r)
     }
 }
 
+// Print the array
+void printArray(vector<int> Bint, int size) {
+  for (int i = 0; i < size; i++)
+    cout << Bint[i] << " ";
+  cout << endl;
+}
+
 int main()
 {
-    vector<std::string> rankedListA = {"E", "G", "S"};
-    vector<std::string> rankedListB = {"S", "E", "G"};
-    //vector<int> Bint = {3,1,2,4};
-
+    /*
+    // vector<std::string> rankedListA = {"E", "G", "S"};
+    // vector<std::string> rankedListB = {"S", "E", "G"};
     // vector<string> rankedListA = {"A", "Q", "B", "CDR"};
     // vector<string> rankedListB = {"Q", "A", "CDR", "B"};
-    //  int tot = countOOO(rankedListA,rankedListB);
+    //int tot = mergeSort(Bint, 0, size - 1);
+    //cout << "tot = " tot << endl;
+    return 0;
+    */
+    // vector<int> Bint = {3,1,2,4};
 
-    
+    /*
     vector<int> Bint(rankedListB.size());
     map<string, int> songMap;
     for (int i = 0; i < rankedListA.size(); i++)
@@ -145,26 +164,28 @@ int main()
         Bint[i] = songMap.at(temp);
 
         cout << "typeid(Bint[i]).name() = " << typeid(Bint[i]).name() << endl;
-        //cout << "typeid(hello[i]).name() = " << typeid(hello[i]).name() << endl;
+        // cout << "typeid(hello[i]).name() = " << typeid(hello[i]).name() << endl;
     }
 
     cout << "typeid(Bint).name() = " << typeid(Bint).name() << endl;
-    //cout << "typeid(hello).name() = " << typeid(hello).name() << endl;
-    
+    // cout << "typeid(hello).name() = " << typeid(hello).name() << endl;
+    */
 
     // vector<int> Bint = {6, 5, 12, 10, 9, 1};
     // vector<int> Bint = {2,1};
     // vector<int> Bint = {2};
     // vector<int> Bint = {4, 2, 1, 3};
-    // vector<int> Bint = {3,1,2};
+     vector<int> Bint = {4,1,2};
+    // vector<int> Bint = {3,1,2,4};
+
     // This section does the good stuff and solves the mystery
     int size = Bint.size();
     mergeSort(Bint, 0, size - 1);
     int tot;
-    // cout << "Sorted array: \n";
-    // printArray(Bint, size);
-    cout << "Gcounter = " << Gcounter << endl;
-    cout << "c_counter = " << c_counter << endl;
+    cout << "Sorted array: \n";
+    printArray(Bint, size);
+    cout << "total Gcounter = " << Gcounter << endl;
+    cout << "total c_counter = " << c_counter << endl;
     if (size < 4)
     {
         tot = Gcounter;
@@ -176,4 +197,5 @@ int main()
 
     cout << "tot = " << tot << endl;
     return 0;
+    
 }
