@@ -7,9 +7,9 @@ using namespace std;
 int b_counter = 0;
 int c_counter = 0;
 
-void printArray(vector<int> *Bint, int size);
-void mergeSort(vector<int> *Bint, int l, int r);
-void merge(vector<int> *Bint, int p, int q, int r);
+void printArray(vector<int> Bint, int size);
+void mergeSort(vector<int> Bint, int l, int r);
+void merge(vector<int> Bint, int p, int q, int r);
 int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rankedListB);
 
 // countOOO computes the number of pairs of elements in rankedListA that are out of order in rankedListB
@@ -34,6 +34,7 @@ int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rank
     int size = Bint.size();
     mergeSort(Bint, 0, size - 1);
     int tot = b_counter + c_counter;
+    cout << "tot = " << tot << endl;
 
     return tot;
 }
@@ -69,13 +70,13 @@ void merge(vector<int> Bint, int p, int q, int r)
         {
             Bint[k] = L[i];
             i++;
-            // cout << "a" << endl;
+            cout << "a" << endl;
         }
         else
         {
             Bint[k] = M[j];
             j++;
-            // cout << "b" << endl;
+            cout << "b" << endl;
             b_counter++;
             t_counter++;
         }
@@ -91,21 +92,35 @@ void merge(vector<int> Bint, int p, int q, int r)
         k++;
         t_counter++;
         tc_counter++;
-        // cout << "c" << endl;
-        // cout << "r-p = " << r - q << endl;
-        // cout << "n1 = " << n1 << endl;
-        // cout << "t_counter = " << t_counter << endl;
+        cout << "c" << endl;
+        cout << "r-p = " << r - q << endl;
+        cout << "n1 = " << n1 << endl;
+        cout << "t_counter = " << t_counter << endl;
     }
     while (j < n2)
     {
         Bint[k] = M[j];
         j++;
         k++;
-        // cout << "d" << endl;
+        cout << "d" << endl;
     }
     if (t_counter > 2)
     {
         c_counter = c_counter + tc_counter;
+    }
+}
+
+void mergeSort(vector<int> Bint, int l, int r)
+{
+    // int counter;
+    if (l < r)
+    {
+        // m is the point where the array is divided into two subarrays
+        int m = l + (r - l) / 2;
+        mergeSort(Bint, l, m);
+        mergeSort(Bint, m + 1, r);
+        merge(Bint, l, m, r);
+        // cout << "final c_counter = " << c_counter << endl;
     }
 }
 
@@ -126,8 +141,7 @@ int main()
     // vector<std::string> rankedListB = {"S", "E", "G"};
     vector<string> rankedListA = {"A", "Q", "B", "CDR"};
     vector<string> rankedListB = {"Q", "A", "CDR", "B"};
-    int tot = mergeSort(Bint, 0, size - 1);
-    cout << "tot = " tot << endl;
+    countOOO(rankedListA, rankedListB);
     return 0;
 
     // vector<int> Bint = {3,1,2,4};
@@ -158,7 +172,7 @@ int main()
      // vector<int> Bint = {2,1};
      // vector<int> Bint = {2};
      // vector<int> Bint = {4, 2, 1, 3};
-     vector<int> Bint = {4, 1, 2};
+     vector<int> Bint = {3, 1, 2};
      // vector<int> Bint = {3,1,2,4};
 
      // This section does the good stuff and solves the mystery
