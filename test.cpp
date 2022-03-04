@@ -5,14 +5,16 @@
 #include <typeinfo>
 
 using namespace std;
-using std::vector;
 
 int main()
 {
-    std::vector<std::string> A = {"A", "Q", "B", "CDR"};
-    std::vector<std::string> B = {"Q", "A", "CDR", "B"};
-    vector<int> Bint[B.size()];
-    // std::vector<int> Bint[];
+    /*Got rid of the std:: in these decalrations for clarity */
+    vector<string> A = {"A", "Q", "B", "CDR"};
+    vector<string> B = {"Q", "A", "CDR", "B"};
+
+    /* You used brackets [] insteas of parenthesis () here when specifying the size */
+    vector<int> Bint(B.size());
+
     map<string, int> songMap;
     for (int i = 0; i < A.size(); i++)
     {
@@ -27,46 +29,25 @@ int main()
         cout << '\t' << itr->first << '\t' << itr->second << '\n';
     }
 
-    // cout << typeid(songMap[B[2]]).name() << endl;
-    //(St6vectorIiSaIiEE)songMap[B[2]];
-    // cout << typeid(songMap[B[2]]).name() << endl;
-
-    cout << typeid(Bint[2]).name() << endl;
-
     cout << endl;
     for (int i = 0; i < B.size(); i++)
     {
         string temp = B[i];
-        // cout << temp << endl;
-        // cout << typeid(songMap[A[i]]).name() << endl;
-        // cout << typeid(songMap[temp]).name() << endl;
-        // cout << "songMap[temp] = " << songMap[temp] << endl;
-        // Bint[i] = songMap[temp];
-        //  cout << "Bint[i] = " << Bint[i] << endl;
+        
+        cout << typeid(songMap[temp]).name() << endl;
+        cout << "songMap[temp] = " << songMap[temp] << endl;
+
+        /*
+         *A general debugging tip - if a line is breaking the code, try to simplify it to see what is breaking it
+         *For example, I changed the line  to Bint[0] = 1; just to see if that'd still break it (it did)
+         *This was a sign that the declaration was incorrect 
+        */
+        Bint[i] = songMap.at(temp);
+        cout << "Bint[i] = " << Bint[i] << endl;
     }
-    // map<string, int>
 
-    // devb@bu.edu
+    //devb@bu.edu
 
-    /*
-     std::vector<int> Aint;
-     for (int i = 0; i < A.size(); i++)
-     {
-         cout << "A[i] = " << A[i] << endl;
-     }
-     for (int i = 1; i <= A.size(); i++)
-     {
-         i;
-         makeVariable("convert ascii val", A[i]);
-         cout << "Aint[i] = " << A[i] << endl;
-     }
- */
+
     return 0;
 }
-
-/*
-1) convert string to a int variable
-2) assign a num to each int variable
-
-
-*/
