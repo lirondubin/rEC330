@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <map>
 //#include "problem3a.h"
 
 using namespace std;
@@ -7,21 +9,44 @@ int Gcounter = 0;
 int c_counter = 0;
 int reset_counter = 0;
 
-void printArray(int *arr[], int size);
-void mergeSort(int *arr[], int l, int r);
-void merge(int *arr[], int p, int q, int r);
+void printArray(vector<int> *rankedListB, int size);
+void mergeSort(vector<int> *rankedListB, int l, int r);
+void merge(vector<int> *rankedListB, int p, int q, int r);
+
+/*
 
 // countOOO computes the number of pairs of elements in rankedListA that are out of order in rankedListB
-/*int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rankedListB)
+int countOOO(std::vector<std::string> rankedListA, std::vector<std::string> rankedListB)
 {
-    int size = sizeof(arr) / sizeof(arr[0]);
-    mergeSort(arr, 0, size - 1);
-    // cout << "Sorted array: \n";
-    return Gcounter; // don't forget to change this
-}*/
+    // This section uses a MAP to convert the vec strings to a vec of ints
+    vector<int> Bint(rankedListB.size());
+    map<string, int> songMap;
+    for (int i = 0; i < rankedListA.size(); i++)
+    {
+        songMap.insert(pair<string, int>(rankedListA[i], i + 1));
+    }
+    map<string, int>::iterator itr;
+    for (int i = 0; i < rankedListB.size(); i++)
+    {
+        string temp = rankedListB[i];
+        Bint[i] = songMap.at(temp);
+        cout << "Bint[i] = " << Bint[i] << endl;
+    }
+
+    // This section does the good stuff and solves the mystery
+    int size = rankedListB.size();
+    mergeSort(rankedListB, 0, size - 1);
+    cout << "Sorted array: \n";
+    printArray(rankedListB, size);
+    int tot = c_counter + Gcounter;
+    cout << "tot = " << tot << endl;
+    return tot;
+}
+
+*/
 
 // Merge two subarrays L and M into arr
-void merge(int arr[], int p, int q, int r)
+void merge(vector<int> rankedListB, int p, int q, int r)
 {
 
     // Create L ← A[p..q] and M ← A[q+1..r]
@@ -31,9 +56,9 @@ void merge(int arr[], int p, int q, int r)
     int L[n1], M[n2];
 
     for (int i = 0; i < n1; i++)
-        L[i] = arr[p + i];
+        L[i] = rankedListB[p + i];
     for (int j = 0; j < n2; j++)
-        M[j] = arr[q + 1 + j];
+        M[j] = rankedListB[q + 1 + j];
 
     // Maintain current index of sub-arrays and main array
     int i, j, k;
@@ -48,14 +73,14 @@ void merge(int arr[], int p, int q, int r)
     {
         if (L[i] <= M[j])
         {
-            arr[k] = L[i];
+            rankedListB[k] = L[i];
             i++;
             cout << "a" << endl;
             // Gcounter++;
         }
         else
         {
-            arr[k] = M[j];
+            rankedListB[k] = M[j];
             j++;
             cout << "b" << endl;
             Gcounter++;
@@ -67,7 +92,7 @@ void merge(int arr[], int p, int q, int r)
     // pick up the remaining elements and put in A[p..r]
     while (i < n1)
     {
-        arr[k] = L[i];
+        rankedListB[k] = L[i];
         i++;
         k++;
         if (n1 != 2)
@@ -78,7 +103,7 @@ void merge(int arr[], int p, int q, int r)
     }
     while (j < n2)
     {
-        arr[k] = M[j];
+        rankedListB[k] = M[j];
         j++;
         k++;
         // Gcounter++;
@@ -96,7 +121,7 @@ void merge(int arr[], int p, int q, int r)
 }
 
 // Divide the array into two subarrays, sort them and merge them
-void mergeSort(int arr[], int l, int r)
+void mergeSort(vector<int> rankedListB, int l, int r)
 {
     // int counter;
     if (l < r)
@@ -104,36 +129,71 @@ void mergeSort(int arr[], int l, int r)
         // m is the point where the array is divided into two subarrays
         int m = l + (r - l) / 2;
 
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
+        mergeSort(rankedListB, l, m);
+        mergeSort(rankedListB, m + 1, r);
 
         // Merge the sorted subarrays
-        merge(arr, l, m, r);
+        merge(rankedListB, l, m, r);
         cout << "final c_counter = " << c_counter << endl;
     }
 }
 
 // Print the array
-void printArray(int arr[], int size)
+void printArray(vector<int> rankedListB, int size)
 {
     for (int i = 0; i < size; i++)
-        cout << arr[i] << " ";
+        cout << rankedListB[i] << " ";
     cout << endl;
 }
 
 int main()
 {
+    /*
+        vector<string> rankedListA = {"A", "Q", "B", "CDR"};
+        vector<string> rankedListB = {"Q", "A", "CDR", "B"};
+        countOOO(rankedListA, rankedListB);
+        return 0;*/
+
     // int counter;
-    //int arr[] = {6, 5, 12, 10, 9, 1};
-    int arr[] = {4, 2, 1, 3};
 
-    int size = sizeof(arr) / sizeof(arr[0]);
+    vector<string> rankedListA = {"A", "Q", "B", "CDR"};
+    vector<string> rankedListB = {"Q", "A", "CDR", "B"};
 
-    mergeSort(arr, 0, size - 1);
+    /* You used brackets [] insteas of parenthesis () here when specifying the size */
+    vector<int> Bint(rankedListB.size());
+    map<string, int> songMap;
+    for (int i = 0; i < rankedListA.size(); i++)
+    {
+        songMap.insert(pair<string, int>(rankedListA[i], i + 1));
+    }
+
+    map<string, int>::iterator itr;
+    cout << "\nThe map songMap is : \n";
+    cout << "\tKEY\tELEMENT\n";
+    for (itr = songMap.begin(); itr != songMap.end(); ++itr)
+    {
+        cout << '\t' << itr->first << '\t' << itr->second << '\n';
+    }
+    cout << endl;
+    for (int i = 0; i < rankedListB.size(); i++)
+    {
+        string temp = rankedListB[i];
+        cout << typeid(songMap[temp]).name() << endl;
+        cout << "songMap[temp] = " << songMap[temp] << endl;
+        Bint[i] = songMap.at(temp);
+        cout << "Bint[i] = " << Bint[i] << endl;
+    }
+
+    // vector<int> rankedListB = {6, 5, 12, 10, 9, 1};
+    // vector<int> rankedListB = {4, 2, 1, 3};
+
+    int size = rankedListB.size();
+
+    // mergeSort(rankedListB, 0, size - 1);
 
     cout << "Sorted array: \n";
-    printArray(arr, size);
-    // cout << "counter = " << counter << endl;
+    // printArray(rankedListB, size);
+    //  cout << "counter = " << counter << endl;
     int tot = c_counter + Gcounter;
     cout << "tot = " << tot << endl;
     return 0;
