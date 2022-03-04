@@ -2,18 +2,21 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <typeinfo>
+
 using namespace std;
+using std::vector;
 
 int main()
 {
     std::vector<std::string> A = {"A", "Q", "B", "CDR"};
     std::vector<std::string> B = {"Q", "A", "CDR", "B"};
-    std::vector<int> Bint = {0 0 0 0}
+    vector<int> Bint[B.size()];
     // std::vector<int> Bint[];
     map<string, int> songMap;
     for (int i = 0; i < A.size(); i++)
     {
-        songMap.insert(pair<string, int>(A[i], i+1));
+        songMap.insert(pair<string, int>(A[i], i + 1));
     }
 
     map<string, int>::iterator itr;
@@ -24,13 +27,26 @@ int main()
         cout << '\t' << itr->first << '\t' << itr->second << '\n';
     }
 
+    // cout << typeid(songMap[B[2]]).name() << endl;
+    //(St6vectorIiSaIiEE)songMap[B[2]];
+    // cout << typeid(songMap[B[2]]).name() << endl;
+
+    cout << typeid(Bint[2]).name() << endl;
+
     cout << endl;
-    for (itr2 = songMap.begin(); itr2 != songMap.end(); ++itr)
+    for (int i = 0; i < B.size(); i++)
     {
-        cout << '\t' << itr2->first << '\t' << itr2->second << '\n';
+        string temp = B[i];
+        // cout << temp << endl;
+        // cout << typeid(songMap[A[i]]).name() << endl;
+        // cout << typeid(songMap[temp]).name() << endl;
+        // cout << "songMap[temp] = " << songMap[temp] << endl;
+        // Bint[i] = songMap[temp];
+        //  cout << "Bint[i] = " << Bint[i] << endl;
     }
     // map<string, int>
-    
+
+    // devb@bu.edu
 
     /*
      std::vector<int> Aint;
