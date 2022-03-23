@@ -11,53 +11,53 @@ using namespace std;
 
 int main()
 {
-    string line = "http://185.183.98.199/online/CI/b39580e3b5d7e2e988332c23e4f293fb";
-    cout << "string: " << line << endl;
-    vector<int> intVec(0,0);
-    vector<int> arr_vectors[2];
-    int length = line.size();
-    for (int i = 0; i < length; i++)
+    ifstream testFile("phishing-links-INACTIVE.txt");
+    string line;
+    vector<int> linkVec;
+    int tot_links = 0;
+    int link_length = 0;
+    int max_length = 0;
+    int i = 0;
+    int j = 0;
+    while (getline(testFile, line))
     {
-        intVec.push_back(line[i]);
+        tot_links++;
+        link_length = line.size();
+        if (link_length > max_length)
+        {
+            max_length = link_length;
+        }
     }
-    cout << "intVec: " << endl;
-    for (int i = 0; i < length; i++)
+    int intArr[tot_links][max_length]; // sizeof(arr)/sizeof(arr[0])
+
+    // for (int i = 0; i < tot_links; i++)
+    i = 0;
+    testFile.clear();
+    testFile.seekg(0, ios::beg);
+    while (getline(testFile, line))
     {
-        for (int j = 0; j < length; j++)
-            cout << intVec[i];
+        link_length = line.size();
+        vector<int> intVec(0, link_length);
+        for (int j = 0; j < link_length; j++)
+        {
+            intArr[i][j] = int(line[j]);
+        }
+        i++;
     }
-    cout << endl;
-    // int i = 0;
-    // ifstream testFile("phishing-links-INACTIVE.txt");
-    // string line;
-    // vector<int> linkVec;
-    // while(getline(testFile, line)){
-    //     int length = line.size();
-    //     for(i = 0; i < length; i++){
-
-    //     }
-    //     cout << length << endl;
-    //     // cout << line[7] << endl;
-    //     // linkVec.push_back(int(line));
-    //     i++;
-
-    //     // string date;
-    //     // int time;
-    //     // float amount;
-
-    //     // std::replace(line.begin(), line.end(), ',', ' ');
-
-    //     // stringstream ss(line);
-
-    //     // ss >> date;
-    //     // ss >> time;
-    //     // ss >> amount;
-
-    //     // cout << "Date: " << date << " ";
-    //     // cout << "Time: " << std::setfill('0') << std::setw(4) << time << " ";
-    //     // cout << "Amount: " << amount << " ";
-
-    //     // cout << '\n';
-    // }
-    // cout << "total files: " << i << endl;
 }
+
+// // this block prints intArr
+// i = 0;
+// j = 0;
+// testFile.clear();
+// testFile.seekg(0, ios::beg);
+// while (getline(testFile, line))
+// {
+//     link_length = line.size();
+//     for (int j = 0; j < link_length; j++)
+//     {
+//         cout << intArr[i][j];
+//     }
+//     cout << endl;
+//     i++;
+// }
