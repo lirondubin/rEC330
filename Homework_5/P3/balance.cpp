@@ -30,13 +30,13 @@ bool isWeightBalanced(node *root, int k)
 
 int max(int first, int second)
 {
-    if (first >= second)
+    if (first < second)
     {
-        return first;
+        return second;
     }
     else
     {
-        return second;
+        return first;
     }
 }
 
@@ -53,7 +53,7 @@ int height(node *node)
 }
 node *newNode(int data)
 {
-    node *Node = new node();
+    node *Node = new node(data);
     Node->data = data;
     Node->left = NULL;
     Node->right = NULL;
@@ -63,6 +63,17 @@ node *newNode(int data)
 
 int main()
 {
-
+    node* root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->right->left = newNode(5);
+    root->right->right = newNode(6);
+    root->left->left->left = newNode(7);
+ 
+    if (isWeightBalanced(root->left,0))
+        cout << "Tree is balanced";
+    else
+        cout << "Tree is not balanced";
     return 0;
 }
