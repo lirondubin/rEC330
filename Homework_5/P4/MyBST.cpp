@@ -18,7 +18,7 @@ using namespace std;
 
 struct Node *search(struct Node *root, int key);
 void inorder(struct Node *root, MyBST *t2);
-void adjust(MyBST target);
+void adjust(Node *root, MyBST *t2);
 
 vector<Rotation> MyBST::transform(MyBST target)
 {
@@ -36,7 +36,7 @@ vector<Rotation> MyBST::transform(MyBST target)
     else
     {
         search(root, t2->root->key); // search(current BST's root, target's key)
-        // inorder(struct Node *root, MyBST *t2)
+        inorder(root, t2);
 
         /*
         target = "find root 2 in BST by applying search";
@@ -70,19 +70,24 @@ void inorder(struct Node *root, MyBST *t2)
     {
         if (root->key != t2->root->key)
         {
-            //adjust(root);
+            adjust(root, t2);
         }
         inorder(root->left, t2);
         inorder(root->right, t2);
     }
 }
 
-// adjust(Node *root)
-// {
-//     inorder(root) while (/*(target->key != root->key) || */ target != MyBST)
-//     {
-//     }
-// }
+void adjust(Node *root, MyBST *t2)
+{
+    if (t2->root->key < root->key)
+    {
+        Rotation(root->key, ZIG);
+    }
+    else if (t2->root->key >= root->key)
+    {
+        Rotation(root->key, ZAG);
+    }
+}
 
 MyBST::MyBST(int num)
 {
