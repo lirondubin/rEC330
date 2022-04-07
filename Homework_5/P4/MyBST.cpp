@@ -5,6 +5,8 @@
 #include "BST.cpp"
 #include "MyBST.h"
 
+using namespace std;
+
 /**
  * Computes how to transform this MyBST into the target MyBST using rotations.
  * Returns a vector of rotations indicating which rotations around which nodes
@@ -14,6 +16,10 @@
  * rotations = t1.transform(t2)
  */
 
+struct Node *search(struct Node *root, int key);
+void inorder(struct Node *root, MyBST *t2);
+void adjust(MyBST target);
+
 vector<Rotation> MyBST::transform(MyBST target)
 {
 
@@ -21,29 +27,60 @@ vector<Rotation> MyBST::transform(MyBST target)
 
     // M.transform(t2//some other BST)
     /*** Your implementation should go here. ***/
+    MyBST *t2 = &target;
 
-    // if (input-> == NULL)
-    // {
-    //     return;
-    // }
-    // else
-    // {
-    //     target = "find root 2 in BST by applying search";
-    //     "adjust root(target)";
-    //     transform(target->left);
-    //     transform(target->right);
-    // }
+    if (!(t2->root->key))
+    {
+        return {};
+    }
+    else
+    {
+        search(root, t2->root->key); // search(current BST's root, target's key)
+        // inorder(struct Node *root, MyBST *t2)
 
-    // "adjust root (target)";
+        /*
+        target = "find root 2 in BST by applying search";
+        "adjust root(target)";
+        transform(target->left);
+        transform(target->right);
+        */
+        cout << "fuck you wise owl" << endl;
+    }
 
     return {};
 }
 
-// void adjust(MyBST target)
-// {
-//     while ((target->key != num[0]) || target != MyBST)
-//     {
+struct Node *search(struct Node *root, int key)
+{
+    // Base Cases: root is null or key is present at root
+    if (root == NULL || root->key == key)
+        return root;
 
+    // Key is greater than root's key
+    if (root->key < key)
+        return search(root->right, key);
+
+    // Key is smaller than root's key
+    return search(root->left, key);
+}
+
+void inorder(struct Node *root, MyBST *t2)
+{
+    if (root != NULL)
+    {
+        if (root->key != t2->root->key)
+        {
+            //adjust(root);
+        }
+        inorder(root->left, t2);
+        inorder(root->right, t2);
+    }
+}
+
+// adjust(Node *root)
+// {
+//     inorder(root) while (/*(target->key != root->key) || */ target != MyBST)
+//     {
 //     }
 // }
 
@@ -87,10 +124,14 @@ int main()
 {
     vector<int> firstVec = {1, 5, 3, 65, 34};
     MyBST M(firstVec);
+    vector<int> secondec = {1, 5, 3, 65, 34};
+    MyBST Q(firstVec);
+
+    M.transform(Q);
 
     MyBST *T = &M;
-    T->root->key;
-    cout << T->root->key << endl;
+    // T->root->key;
+    cout << T->root->right->right->left->key << endl;
     // cout << M->(key + 1) << endl;
 
     // cout << M.print() << endl;
