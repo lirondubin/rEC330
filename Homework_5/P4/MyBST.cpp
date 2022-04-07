@@ -15,13 +15,8 @@ using namespace std;
  * IMPORTANT: We want to transform T1 into T2 so the call should look like
  * rotations = t1.transform(t2)
  */
-
-// struct Node *search(struct Node *root, int key);
-void inorder(struct Node *root, MyBST *t2);
-void adjust(Node *root, MyBST *t2);
-
-Node *rightRotate(Node *x);
-Node *leftRotate(Node *x);
+ Node * MyBST::rotateRight(Node *Q);
+Node *MyBST::rotateLeft(struct Node *P);
 Node *splay(Node *root, int key);
 Node *search(Node *root, int key);
 void preOrder(Node *root);
@@ -40,137 +35,63 @@ vector<Rotation> MyBST::transform(MyBST target)
     }
     else
     {
-        Node *desiredRoot = search(root, t2->root->key); // search(current BST's root, target's key)
-        inorder(desiredRoot, t2);
-
-        /*
-        target = "find root 2 in BST by applying search";
-        "adjust root(target)";
-        transform(target->left);
-        transform(target->right);
-        */
-        cout << "fuck you wise owl" << endl;
+        search(root, t2->root->key); // search(current BST's root, target's key)
     }
 
-    return {};
+    return returnVec;
 }
 
-// struct Node *search(struct Node *root, int key)
-// {
-//     // Base Cases: root is null or key is present at root
-//     if (root == NULL || root->key == key)
-//         return root;
-
-//     // Key is greater than root's key
-//     if (root->key < key)
-//         return search(root->right, key);
-
-//     // Key is smaller than root's key
-//     return search(root->left, key);
-// }
-
-void inorder(struct Node *root, MyBST *t2)
-{
-    if (root != NULL)
-    {
-        if (root->key != t2->root->key)
-        {
-            adjust(root, t2);
-        }
-        inorder(root->left, t2);
-        inorder(root->right, t2);
-    }
-}
-
-void adjust(Node *root, MyBST *t2)
-{
-    if (t2->root->key < root->key)
-    {
-        // do a ZIG rotation
-    }
-    else if (t2->root->key >= root->key)
-    {
-        // do a ZAG rotation
-    }
-    return;
-}
-
-Node *rightRotate(Node *x)
-{
-    Node *y = x->left;
-    x->left = y->right;
-    y->right = x;
-    return y;
-}
-Node *leftRotate(Node *x)
-{
-    Node *y = x->right;
-    x->right = y->left;
-    y->left = x;
-    return y;
-}
 Node *splay(Node *root, int key)
 {
-    // Base cases: root is NULL or
-    // key is present at root
     if (root == NULL || root->key == key)
         return root;
     if (root->key > key)
     {
-        // Key is not in tree, we are done
         if (root->left == NULL)
+        {
             return root;
-        // Zig-Zig (Left Left)
+        }
         if (root->left->key > key)
         {
-            // First recursively bring the
-            // key as root of left-left
             root->left->left = splay(root->left->left, key);
-            // Do first rotation for root,
-            // second rotation is done after else
-            root = rightRotate(root);
+            root = rotateRight(root);
         }
         else if (root->left->key < key) // Zig-Zag (Left Right)
         {
-            // the key as root of left-right
             root->left->right = splay(root->left->right, key);
-            // Do first rotation for root->left
             if (root->left->right != NULL)
-                root->left = leftRotate(root->left);
+            {
+                root->left = rotateLeft(root->left);
+            }
         }
-        // Do second rotation for root
-        return (root->left == NULL) ? root : rightRotate(root);
+        return (root->left == NULL) ? root : rotateRight(root);
     }
     else // Key lies in right subtree
     {
         if (root->right == NULL)
+        {
             return root;
+        }
+
         if (root->right->key > key)
         {
             root->right->left = splay(root->right->left, key);
             if (root->right->left != NULL)
-                root->right = rightRotate(root->right);
+            {
+                root->right = rotateRight(root->right);
+            }
         }
         else if (root->right->key < key) // Zag-Zag (Right Right)
         {
             root->right->right = splay(root->right->right, key);
-            root = leftRotate(root);
+            root = rotateLeft(root);
         }
-        return (root->right == NULL) ? root : leftRotate(root);
+        return (root->right == NULL) ? root : rotateLeft(root);
     }
 }
 Node *search(Node *root, int key)
 {
     return splay(root, key);
-}
-void preOrder(Node *root)
-{
-    if (root != NULL)
-    {
-        cout << root->key << " ";
-        preOrder(root->left);
-        preOrder(root->right);
-    }
 }
 
 MyBST::MyBST(int num)
