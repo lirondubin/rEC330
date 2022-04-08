@@ -2,8 +2,11 @@
 // MyBST.cpp
 // bst_transform
 //
-#include "BST.cpp"
+//#include "BST.h"
 #include "MyBST.h"
+#include "BST.h"
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -15,36 +18,34 @@ using namespace std;
  * IMPORTANT: We want to transform T1 into T2 so the call should look like
  * rotations = t1.transform(t2)
  */
- Node * MyBST::rotateRight(Node *Q);
-Node *MyBST::rotateLeft(struct Node *P);
-Node *splay(Node *root, int key);
-Node *search(Node *root, int key);
-void preOrder(Node *root);
+Node *rotateRight(Node *Q);
+Node *rotateLeft(Node *P);
+Node *adjust(Node *root, int key);
+vector<Rotation> rotVec{};
 
 vector<Rotation> MyBST::transform(MyBST target)
 {
-    vector<Rotation> returnVec{};
-    // MyBST M(//some vector); //some Binary search tree
-
-    // M.transform(t2//some other BST)
-    /*** Your implementation should go here. ***/
+    vector<Rotation> returnVec;
     MyBST *t2 = &target;
     if (!(t2->root->key))
     {
-        return returnVec;
+        return rotVec;
     }
     else
     {
-        search(root, t2->root->key); // search(current BST's root, target's key)
+        adjust(root, t2->root->key);
+        // transform(target);
     }
 
-    return returnVec;
+    return rotVec;
 }
 
-Node *splay(Node *root, int key)
+Node *MyBST::adjust(Node *root, int key)
 {
     if (root == NULL || root->key == key)
-        return root;
+    {
+        return root; //(root, root->key);
+    }
     if (root->key > key)
     {
         if (root->left == NULL)
@@ -53,17 +54,23 @@ Node *splay(Node *root, int key)
         }
         if (root->left->key > key)
         {
-            root->left->left = splay(root->left->left, key);
+            root->left->left = adjust(root->left->left, key);
             root = rotateRight(root);
+            Rotation tracker(key, ZIG);
+            rotVec.push_back(tracker);
         }
         else if (root->left->key < key) // Zig-Zag (Left Right)
         {
-            root->left->right = splay(root->left->right, key);
+            root->left->right = adjust(root->left->right, key);
             if (root->left->right != NULL)
             {
                 root->left = rotateLeft(root->left);
+                Rotation tracker(key, ZAG);
+                rotVec.push_back(tracker);
             }
         }
+        Rotation tracker(key, ZIG);
+        rotVec.push_back(tracker);
         return (root->left == NULL) ? root : rotateRight(root);
     }
     else // Key lies in right subtree
@@ -75,23 +82,25 @@ Node *splay(Node *root, int key)
 
         if (root->right->key > key)
         {
-            root->right->left = splay(root->right->left, key);
+            root->right->left = adjust(root->right->left, key);
             if (root->right->left != NULL)
             {
                 root->right = rotateRight(root->right);
+                Rotation tracker(key, ZIG);
+                rotVec.push_back(tracker);
             }
         }
         else if (root->right->key < key) // Zag-Zag (Right Right)
         {
-            root->right->right = splay(root->right->right, key);
+            root->right->right = adjust(root->right->right, key);
             root = rotateLeft(root);
+            Rotation tracker(key, ZAG);
+            rotVec.push_back(tracker);
         }
+        Rotation tracker(key, ZAG);
+        rotVec.push_back(tracker);
         return (root->right == NULL) ? root : rotateLeft(root);
     }
-}
-Node *search(Node *root, int key)
-{
-    return splay(root, key);
 }
 
 MyBST::MyBST(int num)
@@ -132,12 +141,21 @@ Node *MyBST::rotateLeft(Node *P)
 
 int main()
 {
-    vector<int> firstVec = {1, 5, 3, 65, 34};
-    MyBST M(firstVec);
-    vector<int> secondec = {5, 1, 34, 3, 65};
-    MyBST Q(firstVec);
 
+    vector<int> firstVec = {5, 1, 34, 3, 65};
+    MyBST M(firstVec);
+
+    Rotation R(5, ZIG);
+    vector<Rotation> test;
+    test.push_back(R);
+    vector<int> secondvec = {1, 5, 3, 65, 34};
+    MyBST Q(secondvec);
+
+    cout << "[INFO] Before: " << endl
+         << M.print() << endl;
     M.transform(Q);
+    cout << "[INFO] After: " << endl
+         << M.print() << endl;
 
     // MyBST *T = &M;
     // T->root->key;
