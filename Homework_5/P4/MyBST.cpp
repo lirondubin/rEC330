@@ -1,13 +1,10 @@
-// Got the rotation code from here: https://www.geeksforgeeks.org/splay-tree-set-1-insert/
-// MyBST.cpp
-// bst_transform
-//
-//#include "BST.h"
-#include "MyBST.h"
-#include "BST.h"
-#include <iostream>
-#include <vector>
+// https://levelup.gitconnected.com/binary-search-trees-and-recursion-f99ce7eb647b
+// https://www.geeksforgeeks.org/splay-tree-set-1-insert/?ref=lbp
 
+#include "BST.h"
+#include "MyBST.h"
+#include <vector>
+#include <iostream>
 using namespace std;
 
 /**
@@ -18,15 +15,19 @@ using namespace std;
  * IMPORTANT: We want to transform T1 into T2 so the call should look like
  * rotations = t1.transform(t2)
  */
+
 Node *rotateRight(Node *Q);
-Node *rotateLeft(Node *P);
+Node *rotateLeft(struct Node *P);
 Node *adjust(Node *root, int key);
-vector<Rotation> rotVec{};
+vector<int> split(Node *P);
+vector<Rotation> rotVec;
 
 vector<Rotation> MyBST::transform(MyBST target)
 {
-    vector<Rotation> returnVec;
     MyBST *t2 = &target;
+    vector<int> t1keys;
+    vector<int> t2keys;
+
     if (!(t2->root->key))
     {
         return rotVec;
@@ -34,17 +35,33 @@ vector<Rotation> MyBST::transform(MyBST target)
     else
     {
         adjust(root, t2->root->key);
-        // transform(target);
-    }
 
-    return rotVec;
+        // if (root->left->key != t2->root->left->key)
+        // {
+        //     t1keys = split(root->left);
+        //     t2keys = split(t2->root->left);
+        //     MyBST t1_leftChild(t1keys);
+        //     MyBST t2_leftChild(t2keys);
+        //     t1_leftChild.transform(t2_leftChild);
+        // }
+
+        // if (root->right->key != t2->root->right->key)
+        // {
+        //     t1keys = split(root->right);
+        //     t2keys = split(t2->root->right);
+        //     MyBST t1_rightChild(t1keys);
+        //     MyBST t2_rightChild(t2keys);
+        //     t1_rightChild.transform(t2_rightChild);
+        // }
+        return rotVec;
+    }
 }
 
 Node *MyBST::adjust(Node *root, int key)
 {
     if (root == NULL || root->key == key)
     {
-        return root; //(root, root->key);
+        return root;
     }
     if (root->key > key)
     {
@@ -79,7 +96,6 @@ Node *MyBST::adjust(Node *root, int key)
         {
             return root;
         }
-
         if (root->right->key > key)
         {
             root->right->left = adjust(root->right->left, key);
@@ -103,22 +119,42 @@ Node *MyBST::adjust(Node *root, int key)
     }
 }
 
-MyBST::MyBST(int num)
+vector<int> MyBST::split(Node *root)
 {
-    root = new Node;
-    root->key = num;
-    root->left = nullptr;
-    root->right = nullptr;
+    vector<int> keys;
+    vector<int> keySplit;
+
+    if (root->key)
+    {
+        keys.push_back(root->key);
+        if (root->right)
+        {
+            keySplit = split(root->right);
+            keys.insert(
+                keys.end(),
+                std::make_move_iterator(keySplit.begin()),
+                std::make_move_iterator(keySplit.end()));
+        }
+        if (root->left)
+        {
+            keySplit = split(root->left);
+            keys.insert(
+                keys.end(),
+                std::make_move_iterator(keySplit.begin()),
+                std::make_move_iterator(keySplit.end()));
+        }
+    }
+    return keys;
 }
 
-MyBST::MyBST(vector<int> &nums)
+void preOrder(Node *root)
 {
-    root = new Node;
-    root->key = nums[0];
-    root->left = nullptr;
-    root->right = nullptr;
-    for (int i = 1; i < nums.size(); i++)
-        insert(nums[i]);
+    if (root != NULL)
+    {
+        cout << root->key << " ";
+        preOrder(root->left);
+        preOrder(root->right);
+    }
 }
 
 // You can use the rotation functions below as a starting point,
@@ -139,30 +175,38 @@ Node *MyBST::rotateLeft(Node *P)
     return Q;
 }
 
+MyBST::MyBST(int num)
+{
+    root = new Node;
+    root->key = num;
+    root->left = nullptr;
+    root->right = nullptr;
+}
+
+MyBST::MyBST(vector<int> &nums)
+{
+    root = new Node;
+    root->key = nums[0];
+    root->left = nullptr;
+    root->right = nullptr;
+    for (int i = 1; i < nums.size(); i++)
+        insert(nums[i]);
+}
+
 int main()
 {
-
-    vector<int> firstVec = {5, 1, 34, 3, 65};
+    vector<int> firstVec = {1, 20, 3, 34, 5, 65};
     MyBST M(firstVec);
-
-    Rotation R(5, ZIG);
-    vector<Rotation> test;
-    test.push_back(R);
-    vector<int> secondvec = {1, 5, 3, 65, 34};
-    MyBST Q(secondvec);
-
-    cout << "[INFO] Before: " << endl
-         << M.print() << endl;
-    M.transform(Q);
-    cout << "[INFO] After: " << endl
-         << M.print() << endl;
-
-    // MyBST *T = &M;
-    // T->root->key;
-    // cout << T->root->right->right->left->key << endl;
-    // cout << M->(key + 1) << endl;
-
-    // cout << M.print() << endl;
+    vector<int> secondec = {20, 5, 1, 3, 65, 34};
+    MyBST Q(secondec);
+    vector<Rotation> finalans;
+    cout << "223" << endl;
+    preOrder((&M)->root);
+    cout << endl << "225" << endl;
+    finalans = M.transform(Q);
+    cout << "227" << endl;
+    preOrder((&M)->root);
+    cout << endl << "229" << endl;
 
     return 0;
 }
