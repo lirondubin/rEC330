@@ -35,7 +35,7 @@ bool canFinish(int n, vector<pair<int, int>> &dependencies)
         // cout << "[INFO] adjSize = " << adjSize << endl;
         // cout << "[INFO] (*depend)[i].first = " << (*depend)[i].first << endl;
         // cout << "[INFO] adj[i][0] = " << adj[i][0] << endl;
-        // cout << "[INFO] (*depend)[i].first = " << (*depend)[i].second << endl;
+        // cout << "[INFO] (*depend)[i].second = " << (*depend)[i].second << endl;
         // cout << "[INFO] adj[i][1] = " << adj[i][1] << endl << endl;
     }
     cout << "[INFO - before] white.size() = " << white.size() << endl;
@@ -57,16 +57,21 @@ bool canFinish(int n, vector<pair<int, int>> &dependencies)
             if (white.find(adj[i][j]) != white.end())
             {
                 cout << "IN HERE " << endl;
-                vector<pair<int, int>> remaining = {};
+                vector<pair<int, int>> remaining = {};                
                 for (int k = 0; k < adjSize; k++) // might not be adding to the empty vector
                 {
-                    cout << "[INFO] 5" << endl;
-                    remaining[k].first = adj[k][0];
-                    remaining[k].second = adj[k][1];
+                    // remaining[k].first = adj[k][0];
+                    // remaining[k].second = adj[k][1];
+                    remaining.push_back(pair(adj[k][0],adj[k][1]));
+                    cout << "[INFO] 4" << endl;
+                    cout << "[INFO] remaining[k].first = " << remaining[k].first << endl;
+                    cout << "[INFO] adj[k][0] = " << adj[k][0] << endl;
+                    cout << "[INFO] remaining[k].second = " << remaining[k].second << endl;
+                    cout << "[INFO] adj[k][1] = " << adj[k][1] << endl << endl;
                 }
                 // vector<pair<int,int>> *recursive;
                 // recursive = &remaining;
-                cout << "[INFO] 4" << endl;
+                cout << "[INFO] 5" << endl;
                 // canFinish(adj[n][i], remaining);
                 // }
                 // if (grey.find(adj[n][i]) != grey.end())
