@@ -35,25 +35,37 @@ void CycleDetect(int n, vector<int> adj[])
     grey.erase(n);   // remove from the grey set
 }
 
-
-int main()
+bool canFinish(int n, vector<pair<int, int>> &dependencies)
 {
-    vector<pair<int, int>> dependencies = {{1, 2}, {2, 3}, {3, 1}};
     vector<int> adj[dependencies.size() + 1]; // vector of array to store the graph
 
     for (int i = 0; i < dependencies.size(); i++)
     {
         edge(adj, dependencies[i].first, dependencies[i].second);
+    }
+    for (int i = 0; i < n; i++)
+    {
         white.insert(i);
     }
-    // for (int i = 0; i < ; i++)
-    // {
-    //     white.insert(i);
-    // }
-    CycleDetect(3, adj);
+
+    CycleDetect(n, adj);
+
     if (flag == 0)
+    {
         cout << "Graph does not contain cycle" << endl;
+        return true;
+    }
     else
+    {
         cout << "Graph contain cycle" << endl;
+        return false;
+    }
+    return 0;
+}
+int main()
+{
+    vector<pair<int, int>> dependencies = {{1, 2}, {2, 3}};
+    canFinish(2, dependencies);
+
     return 0;
 }
