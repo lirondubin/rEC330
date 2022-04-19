@@ -7,125 +7,76 @@
 #include <iostream>
 #include <set>
 #include <utility>
-
+#include <bits/stdc++.h>
 using namespace std;
-
 set<int> white; // white container
 set<int> grey;  // grey container
 set<int> black; // black container
 int flag = 0;
 
-bool canFinish(int n, vector<pair<int, int>> &dependencies)
+void edge(vector<int> adj[], int n, int v);
+void CycleDetect(int n, vector<int> adj[]);
+bool canFinish(int n, vector<pair<int, int>> &dependencies);
+
+void edge(vector<int> adj[], int n, int v)
 {
-    // need to create a grpah
+    adj[n].push_back(v);
+}
 
-    cout << "[INFO] 1" << endl;
-    vector<pair<int, int>> *depend = &dependencies;
-    int numPairs = (*depend).size();
-    vector<int> adj[numPairs];
-    int adjSize = 0;
-
-    for (int i = 0; i < numPairs; i++)
-    {
-        cout << "[INFO] 2" << endl;
-        adj[i].push_back((*depend)[i].first);
-        adj[i].push_back((*depend)[i].second);
-        white.insert(i);
-        adjSize++;
-        // cout << "[INFO] adjSize = " << adjSize << endl;
-        // cout << "[INFO] (*depend)[i].first = " << (*depend)[i].first << endl;
-        // cout << "[INFO] adj[i][0] = " << adj[i][0] << endl;
-        // cout << "[INFO] (*depend)[i].second = " << (*depend)[i].second << endl;
-        // cout << "[INFO] adj[i][1] = " << adj[i][1] << endl << endl;
-    }
-    cout << "[INFO - before] white.size() = " << white.size() << endl;
+// function to detect the cycle in graph
+void CycleDetect(int n, vector<int> adj[])
+{
     white.erase(n); // remove from the white set
     grey.insert(n); // put into the grey set
-    // cout << "[INFO] *std::next(grey.begin(), n) = " << *std::next(grey.begin(), n) << endl;
-
-    for (int i = 0; i < numPairs; i++)
+    for (int i = 0; i < adj[n].size(); i++)
     {
-        cout << "[INFO] 3" << endl;
-        white.erase(n);
-        grey.insert(n);
-
-        for (int j = 0; j < 2; j++)
+        if (white.find(adj[n][i]) != white.end())
         {
-            cout << "[INFO] adj[i][j] = " << adj[i][j] << endl;
-            cout << "[INFO - not equal] *(white.find(adj[i][j])) = " << *(white.find(adj[i][j])) << endl;
-            cout << "[INFO - not equal] *(white.end()) = " << *(white.end()) << endl;
-            if (white.find(adj[i][j]) != white.end())
-            {
-                cout << "IN HERE " << endl;
-                vector<pair<int, int>> remaining = {};                
-                for (int k = 0; k < adjSize; k++) // might not be adding to the empty vector
-                {
-                    // remaining[k].first = adj[k][0];
-                    // remaining[k].second = adj[k][1];
-                    remaining.push_back(pair(adj[k][0],adj[k][1]));
-                    cout << "[INFO] 4" << endl;
-                    cout << "[INFO] remaining[k].first = " << remaining[k].first << endl;
-                    cout << "[INFO] adj[k][0] = " << adj[k][0] << endl;
-                    cout << "[INFO] remaining[k].second = " << remaining[k].second << endl;
-                    cout << "[INFO] adj[k][1] = " << adj[k][1] << endl << endl;
-                }
-                // vector<pair<int,int>> *recursive;
-                // recursive = &remaining;
-                cout << "[INFO] 5" << endl;
-                // canFinish(adj[n][i], remaining);
-                // }
-                // if (grey.find(adj[n][i]) != grey.end())
-                // { // check if its is present or not in grey set
-                //     flag = 1;
-            }
-            cout << "out" << endl;
+            CycleDetect(adj[n][i], adj);
+        }
+        if (grey.find(adj[n][i]) != grey.end())
+        { // check if its is present or not in grey set
+            flag = 1;
         }
     }
     black.insert(n); // put into the black set
     grey.erase(n);   // remove from the grey set
-    if (flag)
+}
+
+bool canFinish(int n, vector<pair<int, int>> &dependencies)
+{
+    vector<int> adj[dependencies.size() + 1]; // vector of array to store the graph
+
+    for (int i = 0; i < dependencies.size(); i++)
     {
-        cout << "there is a cycle" << endl;
-        return false;
+        edge(adj, dependencies[i].first, dependencies[i].second);
+    }
+    for (int i = 0; i < n; i++)
+    {
+        white.insert(i);
+    }
+
+    CycleDetect(n, adj);
+
+    if (flag == 0)
+    {
+        cout << "Graph does not contain cycle" << endl;
+        return true;
     }
     else
     {
-        cout << "there is no cycle" << endl;
-        return true;
+        cout << "Graph contain cycle" << endl;
+        return false;
     }
+    return 0;
 }
-
-bool canRun(int n, vector<pair<int, int>> &dependencies, int j, int i)
-{
-
-    return false;
-}
-
 int main()
 {
-    vector<int> adj[5]; // vector of array to store the graph
+    // vector<pair<int, int>> dependencies = {{1, 2}, {2, 3}, {3,1}};
+    // vector<pair<int, int>> dependencies = {{1, 2}, {2, 3}};
+    vector<pair<int, int>> dependencies = {{1, 2}};
 
-    vector<pair<int, int>> dependencies = {{1, 2}, {2, 3}, {3, 1}};
-    //   vector<pair<int, int> > dependencies = { {1,4}, {3,6} , {2,4} };
+    canFinish(2, dependencies);
 
-    canFinish(3, dependencies);
-
-    // input for edges
-    // edge(adj, 0, 2);
-    // edge(adj, 0, 1);l
-    // edge(adj, 1, 3);
-    // edge(adj, 2, 0);
-    // edge(adj, 3, 3);
-    // edge(adj, 2, 3);
-    // edge(adj, 2, 4);
-    // for (int i = 0; i < 5; i++)
-    //{
-    //  white.insert(i);
-    //}
-    // CycleDetect(0, adj);
-    // if (flag == 0)
-    //  cout << "Graph does not contain cycle" << endl;
-    // else
-    //  cout << "Graph contain cycle" << endl;
     return 0;
 }
