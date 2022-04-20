@@ -27,17 +27,15 @@ void CycleDetect(int n, vector<int> adj[])
     white.erase(n); // remove from the white set
     grey.insert(n); // put into the grey set
 
-    // cout << "[INFO] adj[n].size() = " << sizeof(adj)/sizeof(arr[0])<< endl;
     for (int i = 0; i < adj[n].size(); i++)
     {
-        // cout << "[INFO] adj[i][0] = " << adj[i][0] << endl;
-        // cout << "[INFO] adj[i][1] = " << adj[i][1] << endl << endl;
+        // cout << "[INFO] white.find(adj[n][i]) = " << *(white.find(adj[n][i])) << endl;
         if (white.find(adj[n][i]) != white.end())
         {
             CycleDetect(adj[n][i], adj);
         }
-        if (grey.find(adj[n][i]) != grey.end())
-        { // check if its is present or not in grey set
+        if (grey.find(adj[n][i]) != grey.end()) // check if its is present or not in grey set
+        {
             flag = 1;
         }
     }
@@ -59,19 +57,20 @@ bool canFinish(int n, vector<pair<int, int>> &dependencies)
     {
         white.insert(i);
     }
-    // cout << "[INFO] white.size() = " << white.size() << endl;
-    // cout << "[INFO] adj[n].size() = " << *(&adj + 1) - adj << endl;
-
+    // while(!white.empty())
+    // {
+    //     CycleDetect(n, adj);
+    // }
     CycleDetect(n, adj);
 
     if (flag == 0)
     {
-        cout << " TRUE - Graph DOES NOT contain a cycle" << endl;
+        // cout << "TRUE - Graph DOES NOT contain a cycle" << endl;
         return true;
     }
     else
     {
-        cout << " FALSE - Graph DOES contain a cycle" << endl;
+        // cout << "FALSE - Graph DOES contain a cycle" << endl;
         return false;
     }
     return 0;
@@ -81,6 +80,7 @@ bool canRun(int n, vector<pair<int, int>> &dependencies, int j, int i)
 {
     // reverse dependicnes
     vector<int> opppsiteAdj[n + 1]; // array of vectors to store the graph
+    stack<int> stack;
 
     for (int i = 0; i < dependencies.size(); i++)
     {
@@ -88,57 +88,68 @@ bool canRun(int n, vector<pair<int, int>> &dependencies, int j, int i)
     }
     white.erase(n); // remove from the white set
     grey.insert(n); // put into the grey set
+    stack.push(n);
 
     int counter = 0;
-    while (!isempty(stack))
+    while (!stack.empty())
     {
-        int popped = stack.pop();
-        if (popped == white.end())
+        int popped = stack.top();
+        stack.pop();
+        if (popped == *(white.end()))
         {
-            for (int i = 0; i < adj[n].size(); i++)
+            for (int i = 0; i < opppsiteAdj[n].size(); i++)
             {
-                counter++;
-                if (i < counter)
-                { // check if its is present or not in grey set
-                    flag1 = 1;
+                grey.insert(n);
+                stack.push(n);
+                if (counter > i)
+                { // check if it is present or not in grey set, if present then return true
+                    // flag1 = 1;
+                    // cout << "TRUE - This can run" << endl;
+                    return false;
                 }
             }
         }
+        black.insert(n); // put into the black set
+        grey.erase(n);
+        counter++;
     }
-
-    black.insert(n); // put into the black set
-    grey.erase(n);   // remove from the grey set
-    return false;
+    return true;
 }
 
-int main()
-{
-    // vector<pair<int, int>> CircleLine = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{13,14},{14,15},{15,16},{16,17},{17,18},{18,19},{19,20},{20,21},{21,22},{9,1}};
-    // canFinish(22, CircleLine); // expect false
+// int main()
+// {
+//     vector<pair<int, int>> CircleLine = {{1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7}, {7, 8}, {8, 9}, {13, 14}, {14, 15}, {15, 16}, {16, 17}, {17, 18}, {18, 19}, {19, 20}, {20, 21}, {21, 22}, {9, 1}};
+//     canFinish(22, CircleLine); // expect false
 
-    // vector<pair<int, int>> circle = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{9,1}};
-    // canFinish(9, circle); // expect false
+//     // vector<pair<int, int>> CircleLine = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{9,1},{9,10}/*,{14,15},{15,16},{16,17},{17,18},{18,19},{19,20},{20,21},{21,22}*/};
+//     // canFinish(22, CircleLine); // expect false
 
-    // vector<pair<int, int>> line = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{9,10}};
-    // canFinish(10, line); // expect true
+//     // vector<pair<int, int>> circle = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{9,1}};
+//     // canFinish(9, circle); // expect false
 
-    // vector<pair<int, int>> star1 = {{10,2},{10,2},{10,3},{10,4},{10,5},{10,6},{10,7},{10,8},{10,9}};
-    // canFinish(10, star1); // expect true
+//     // vector<pair<int, int>> line = {{1,2},{2,3},{3,4},{4,5},{5,6},{6,7},{7,8},{8,9},{9,10}};
+//     // canFinish(10, line); // expect true
 
-    // vector<pair<int, int>> star2 = {{1,10},{2,10},{3,10},{4,10},{5,10},{6,10},{7,10},{8,10},{9,10}};
-    // canFinish(10, star2); // expect true
+//     // vector<pair<int, int>> star1 = {{10,2},{10,2},{10,3},{10,4},{10,5},{10,6},{10,7},{10,8},{10,9}};
+//     // canFinish(10, star1); // expect true
 
-    // vector<pair<int, int>> ShortLoop = {{1,2},{2,3},{3,1}};
-    // canFinish(3, ShortLoop); // expect false
+//     // vector<pair<int, int>> star2 = {{1,10},{2,10},{3,10},{4,10},{5,10},{6,10},{7,10},{8,10},{9,10}};
+//     // canFinish(10, star2); // expect true
 
-    // vector<pair<int, int>> small = {{1,2},{2,3}};
-    // canFinish(2, small); // expect true
+//     // vector<pair<int, int>> ShortLoop = {{1,2},{2,3},{3,1}};
+//     // canFinish(3, ShortLoop); // expect false
 
-    // vector<pair<int, int>> ex2 = {{1,2},{2,1}};
-    // canFinish(2, ex2); // expect true
+//     // vector<pair<int, int>> small = {{1,2},{2,3}};
+//     // canFinish(2, small); // expect true
 
-    // vector<pair<int, int>> ex1 = {{1,2}};
-    // canFinish(2,ex1);
+//     // vector<pair<int, int>> ex2 = {{1, 2}, {2, 1}};
+//     // canFinish(2, ex2); // expect true
 
-    return 0;
-}
+//     // vector<pair<int, int>> ex1 = {{1,2}};
+//     // canFinish(2,ex1);
+
+//     // vector<pair<int, int>> test = {{1, 2}, {2, 3}, {3, 1}, {3, 4}};
+//     // canFinish(3, test);
+
+//     return 0;
+// }
